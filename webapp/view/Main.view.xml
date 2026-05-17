@@ -4,26 +4,239 @@
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
 	core:require="{
 		formatter: 'com/myorg/duplicatecheck/model/formatter'
 	}">
 
 	<Page
 		title="{i18n>appTitle}"
-		id="page">
+		id="page"
+		showFooter="true"
+		showNavButton="false"
+		backgroundDesign="List">
+
+		<footer>
+			<OverflowToolbar>
+				<Button
+					id="exitButton"
+					text="Exit"
+					type="Transparent"
+					icon="sap-icon://decline"
+					press=".onExit" />
+				<ToolbarSpacer />
+				<Button
+					id="resetButton"
+					text="Reset"
+					type="Default"
+					icon="sap-icon://reset"
+					press=".onReset" />
+				<Button
+					id="validateButton"
+					text="Validate"
+					type="Emphasized"
+					icon="sap-icon://validate"
+					press=".onValidate" />
+			</OverflowToolbar>
+		</footer>
+
 		<content>
-			<IllustratedMessage
-				title="{i18n>appTitle}"
-				illustrationType="sapIllus-SuccessHighFive"
-				enableVerticalResponsiveness="true"
-				description="{i18n>appDescription}">
-				<additionalContent>
-					<Button
-						id="helloButton"
-						text="{formatter: 'formatter.formatValue', path: 'i18n>btnText'}"
-						press=".sayHello" />
-				</additionalContent>
-			</IllustratedMessage>
+			<VBox
+				class="sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+				fitContainer="true">
+
+				<MessageStrip
+					id="infoStrip"
+					text="Please fill in the required fields marked with an asterisk (*)."
+					type="Information"
+					showIcon="true"
+					showCloseButton="false"
+					class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+
+				<!-- Panel 1: Name -->
+				<Panel
+					id="namePanel"
+					headerText="Name"
+					expandable="true"
+					expanded="true"
+					backgroundDesign="Solid"
+					class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+					<content>
+						<f:SimpleForm
+							id="nameForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+							emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+							columnsXL="1" columnsL="1" columnsM="1"
+							singleContainerFullSize="false">
+
+							<Label text="First Name" required="true" />
+							<Input
+								id="firstName"
+								placeholder="Enter first name"
+								valueLiveUpdate="true" />
+
+							<Label text="Last Name" required="true" />
+							<Input
+								id="lastName"
+								placeholder="Enter last name"
+								valueLiveUpdate="true" />
+
+							<Label text="Company Name" />
+							<Input
+								id="companyName"
+								placeholder="Enter company name (if applicable)"
+								valueLiveUpdate="true" />
+
+						</f:SimpleForm>
+					</content>
+				</Panel>
+
+				<!-- Panel 2: Contact & Address Information -->
+				<Panel
+					id="contactAddressPanel"
+					headerText="Contact &amp; Address Information"
+					expandable="true"
+					expanded="true"
+					backgroundDesign="Solid"
+					class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+					<content>
+						<f:SimpleForm
+							id="contactAddressForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+							emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+							columnsXL="1" columnsL="1" columnsM="1"
+							singleContainerFullSize="false">
+
+							<f:title>
+								<core:Title text="Contact Information" level="H4" />
+							</f:title>
+
+							<Label text="Email Address" required="true" />
+							<Input
+								id="email"
+								placeholder="john.doe@example.com"
+								type="Email"
+								valueLiveUpdate="true" />
+
+							<Label text="Phone Number" />
+							<Input
+								id="phone"
+								placeholder="+1 234 567 8900"
+								type="Tel"
+								valueLiveUpdate="true" />
+
+							<f:title>
+								<core:Title text="Address" level="H4" />
+							</f:title>
+
+							<Label text="Street" />
+							<Input
+								id="street"
+								placeholder="Enter street and house number"
+								valueLiveUpdate="true" />
+
+							<Label text="Postal Code" />
+							<Input
+								id="postalCode"
+								placeholder="Enter postal code"
+								valueLiveUpdate="true" />
+
+							<Label text="City" />
+							<Input
+								id="city"
+								placeholder="Enter city"
+								valueLiveUpdate="true" />
+
+							<Label text="Region" />
+							<Input
+								id="region"
+								placeholder="Enter region / state"
+								valueLiveUpdate="true" />
+
+							<Label text="Country" />
+							<Input
+								id="country"
+								placeholder="Enter country"
+								valueLiveUpdate="true" />
+
+						</f:SimpleForm>
+					</content>
+				</Panel>
+
+			<!-- Panel 3: Tax Information -->
+				<Panel
+					id="taxInfoPanel"
+					headerText="Tax Information"
+					expandable="true"
+					expanded="true"
+					backgroundDesign="Solid"
+					class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+					<content>
+						<f:SimpleForm
+							id="taxInfoForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+							emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+							columnsXL="1" columnsL="1" columnsM="1"
+							singleContainerFullSize="false">
+
+							<Label text="Tax Number" />
+							<Input
+								id="taxNumber"
+								placeholder="Enter tax identification number"
+								valueLiveUpdate="true" />
+
+						</f:SimpleForm>
+					</content>
+				</Panel>
+
+				<!-- Panel 4: Bank Account Information -->
+				<Panel
+					id="bankInfoPanel"
+					headerText="Bank Account Information"
+					expandable="true"
+					expanded="true"
+					backgroundDesign="Solid"
+					class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop sapUiSmallMarginBottom">
+					<content>
+						<f:SimpleForm
+							id="bankInfoForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+							emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+							columnsXL="1" columnsL="1" columnsM="1"
+							singleContainerFullSize="false">
+
+							<Label text="Account Holder Name" />
+							<Input
+								id="bankHolderName"
+								placeholder="Enter account holder full name"
+								valueLiveUpdate="true" />
+
+							<Label text="Bank Account Number" />
+							<Input
+								id="bankAccountNumber"
+								placeholder="Enter IBAN or account number"
+								valueLiveUpdate="true" />
+
+							<Label text="Bank Name" />
+							<Input
+								id="bankName"
+								placeholder="Enter bank name"
+								valueLiveUpdate="true" />
+
+						</f:SimpleForm>
+					</content>
+				</Panel>
+
+			</VBox>
 		</content>
 	</Page>
 

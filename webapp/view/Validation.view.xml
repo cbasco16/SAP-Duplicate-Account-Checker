@@ -1,0 +1,186 @@
+<mvc:View
+    controllerName="com.myorg.duplicatecheck.controller.Validation"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Page
+        title="Validation Summary"
+        id="validationPage"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        showFooter="true"
+        backgroundDesign="List">
+
+        <footer>
+            <OverflowToolbar>
+                <Button
+                    id="backButton"
+                    text="Back"
+                    type="Transparent"
+                    icon="sap-icon://nav-back"
+                    press=".onNavBack" />
+                <ToolbarSpacer />
+                <Button
+                    id="submitButton"
+                    text="Submit"
+                    type="Emphasized"
+                    icon="sap-icon://paper-plane"
+                    press=".onSubmit" />
+            </OverflowToolbar>
+        </footer>
+
+        <content>
+            <VBox
+                class="sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+                fitContainer="true">
+
+                <MessageStrip
+                    id="validationStrip"
+                    text="Please review your information before submitting."
+                    type="Information"
+                    showIcon="true"
+                    showCloseButton="false"
+                    class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+
+                <!-- Name Summary -->
+                <Panel
+                    id="nameSummaryPanel"
+                    headerText="Name"
+                    expandable="true"
+                    expanded="true"
+                    backgroundDesign="Solid"
+                    class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+                    <content>
+                        <f:SimpleForm
+                            id="nameSummaryForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                            labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+                            emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+                            columnsXL="1" columnsL="1" columnsM="1">
+
+                            <Label text="First Name" />
+                            <Text id="summaryFirstName" text="{formModel>/firstName}" />
+
+                            <Label text="Last Name" />
+                            <Text id="summaryLastName" text="{formModel>/lastName}" />
+
+                            <Label text="Company Name" />
+                            <Text id="summaryCompanyName" text="{formModel>/companyName}" />
+
+                        </f:SimpleForm>
+                    </content>
+                </Panel>
+
+                <!-- Contact & Address Summary -->
+                <Panel
+                    id="contactSummaryPanel"
+                    headerText="Contact &amp; Address Information"
+                    expandable="true"
+                    expanded="true"
+                    backgroundDesign="Solid"
+                    class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+                    <content>
+                        <f:SimpleForm
+                            id="contactSummaryForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                            labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+                            emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+                            columnsXL="1" columnsL="1" columnsM="1">
+
+                            <f:title>
+                                <core:Title text="Contact Information" level="H4" />
+                            </f:title>
+
+                            <Label text="Email Address" />
+                            <Text id="summaryEmail" text="{formModel>/email}" />
+
+                            <Label text="Phone Number" />
+                            <Text id="summaryPhone" text="{formModel>/phone}" />
+
+                            <f:title>
+                                <core:Title text="Address" level="H4" />
+                            </f:title>
+
+                            <Label text="Street" />
+                            <Text id="summaryStreet" text="{formModel>/street}" />
+
+                            <Label text="Postal Code" />
+                            <Text id="summaryPostalCode" text="{formModel>/postalCode}" />
+
+                            <Label text="City" />
+                            <Text id="summaryCity" text="{formModel>/city}" />
+
+                            <Label text="Region" />
+                            <Text id="summaryRegion" text="{formModel>/region}" />
+
+                            <Label text="Country" />
+                            <Text id="summaryCountry" text="{formModel>/country}" />
+
+                        </f:SimpleForm>
+                    </content>
+                </Panel>
+
+                <!-- Tax Summary -->
+                <Panel
+                    id="taxSummaryPanel"
+                    headerText="Tax Information"
+                    expandable="true"
+                    expanded="true"
+                    backgroundDesign="Solid"
+                    class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop">
+                    <content>
+                        <f:SimpleForm
+                            id="taxSummaryForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                            labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+                            emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+                            columnsXL="1" columnsL="1" columnsM="1">
+
+                            <Label text="Tax Number" />
+                            <Text id="summaryTaxNumber" text="{formModel>/taxNumber}" />
+
+                        </f:SimpleForm>
+                    </content>
+                </Panel>
+
+                <!-- Bank Summary -->
+                <Panel
+                    id="bankSummaryPanel"
+                    headerText="Bank Account Information"
+                    expandable="true"
+                    expanded="true"
+                    backgroundDesign="Solid"
+                    class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop sapUiSmallMarginBottom">
+                    <content>
+                        <f:SimpleForm
+                            id="bankSummaryForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                            labelSpanXL="2" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+                            emptySpanXL="4" emptySpanL="3" emptySpanM="0" emptySpanS="0"
+                            columnsXL="1" columnsL="1" columnsM="1">
+
+                            <Label text="Account Holder Name" />
+                            <Text id="summaryBankHolderName" text="{formModel>/bankHolderName}" />
+
+                            <Label text="Bank Account Number" />
+                            <Text id="summaryBankAccountNumber" text="{formModel>/bankAccountNumber}" />
+
+                            <Label text="Bank Name" />
+                            <Text id="summaryBankName" text="{formModel>/bankName}" />
+
+                        </f:SimpleForm>
+                    </content>
+                </Panel>
+
+            </VBox>
+        </content>
+    </Page>
+
+</mvc:View>
