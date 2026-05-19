@@ -15,9 +15,10 @@
   "devDependencies": {
     "@cap-js/sqlite": "^2.4",
     "@sap/dev-cap-tools": "^1.31.0",
-    "@ui5/cli": "^4.0.0",
     "@sap/ux-ui5-tooling": "1",
-    "rimraf": "6.0.1"
+    "@ui5/cli": "^4.0.0",
+    "rimraf": "6.0.1",
+    "ui5-tooling-transpile": "^3.11.0"
   },
   "scripts": {
     "generate-entry-point": "dev-cap-tools gen-entrypoint",

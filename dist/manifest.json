@@ -1,0 +1,107 @@
+{
+	"_version": "1.65.0",
+	"sap.app": {
+		"id": "com.myorg.duplicatecheck",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				"",
+				"en"
+			]
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"sourceTemplate": {
+			"id": "@ui5/mcp-server:ts",
+			"version": "0.2.8",
+			"toolsId": "205954dc-7e1b-4480-85d4-4867c5bdd3c3"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "com.myorg.duplicatecheck.view.App",
+			"type": "XML",
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.148.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {}
+			}
+		},
+		"flexEnabled": false,
+		"handleValidation": true,
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.myorg.duplicatecheck.i18n.i18n",
+					"async": true,
+					"supportedLocales": [
+						"",
+						"en"
+					]
+				}
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.myorg.duplicatecheck.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"name": "RouteMain",
+					"pattern": "",
+					"target": [
+						"TargetMain"
+					]
+				},
+				{
+					"name": "RouteValidation",
+					"pattern": "validation",
+					"target": [
+						"TargetValidation"
+					]
+				}
+			],
+			"targets": {
+				"TargetMain": {
+					"viewType": "XML",
+					"viewLevel": 1,
+					"viewId": "Main",
+					"viewName": "Main"
+				},
+				"TargetValidation": {
+					"viewType": "XML",
+					"viewLevel": 2,
+					"viewId": "Validation",
+					"viewName": "Validation"
+				}
+			}
+		},
+		"flexBundle": false
+	}
+}
