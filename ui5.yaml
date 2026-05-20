@@ -15,8 +15,10 @@ server:
       configuration:
         ignoreCertErrors: false
         backend:
+          - path: /odata
+            url: http://127.0.0.1:4004
           - path: /sap
-            url: http://localhost:4004
+            url: http://127.0.0.1:4004
         ui5:
           path:
             - /resources
