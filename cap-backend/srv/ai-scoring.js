@@ -1,6 +1,7 @@
 async function scoreRecord(newRecord, existingRecords) {
-    console.log('[n8n] Calling webhook at https://cambridgeai-dev.app.n8n.cloud/webhook/duplicate-score');
+    console.log('[n8n] Calling webhook at https://cambridgeai-dev.app.n8n.cloud/webhook/duplicate-score');  
 
+// Added N8N
     if (existingRecords.length === 0) {
         console.log('[n8n] No existing records - returning score 100');
         return {
