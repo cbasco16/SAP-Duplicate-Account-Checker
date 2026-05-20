@@ -1,5 +1,5 @@
 async function scoreRecord(newRecord, existingRecords) {
-    console.log('[n8n] Calling webhook at http://localhost:5678/webhook/duplicate-score');
+    console.log('[n8n] Calling webhook at https://cambridgeai-dev.app.n8n.cloud/webhook/duplicate-score');
 
     if (existingRecords.length === 0) {
         console.log('[n8n] No existing records - returning score 100');
@@ -16,7 +16,7 @@ async function scoreRecord(newRecord, existingRecords) {
         const body = JSON.stringify({ newRecord, existingRecords });
         console.log('[n8n] Request body size:', body.length, 'bytes');
 
-        const response = await fetch('http://localhost:5678/webhook/duplicate-score', {
+        const response = await fetch('https://cambridgeai-dev.app.n8n.cloud/webhook/duplicate-score', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body
