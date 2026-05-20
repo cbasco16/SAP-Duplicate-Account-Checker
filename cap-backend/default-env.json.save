@@ -1,0 +1,17 @@
+{
+  "VCAP_SERVICES": {
+    "hana": [{
+      "name": "hana-db",
+      "tags": ["hana"],
+      "credentials": {
+        "host": "c6669d10-5585-4c7d-a661-7aeeec5bae12.hna1.prod-us10.hanacloud.ondemand.com"
+        "port": "443",
+        "user": "DBADMIN",
+        "password": "Welcome@1",
+        "schema": "DBADMIN",
+        "encrypt": true,
+        "sslValidateCertificate": false
+      }
+    }]
+  }
+}

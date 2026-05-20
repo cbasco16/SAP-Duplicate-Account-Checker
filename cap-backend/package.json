@@ -1,26 +1,38 @@
 {
-    "name": "cap-backend",
-    "version": "1.0.0",
-    "description": "CAP backend for duplicate check",
-    "dependencies": {
-        "@anthropic-ai/sdk": "^0.96.0",
-        "@sap/cds": "^9.9.1",
-        "dotenv": "^17.4.2"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "^2.4.0"
-    },
-    "cds": {
-        "requires": {
-            "db": {
-                "kind": "sqlite",
-                "credentials": {
-                    "database": "db/local.db"
-                }
-            }
+  "name": "cap-backend",
+  "version": "1.0.0",
+  "description": "CAP backend for duplicate check",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9.9.1",
+    "dotenv": "^17.4.2",
+    "hdb": "^2.27.1"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2.4.0"
+  },
+  "cds": {
+    "requires": {
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": "db/local.db"
+          }
         }
-    },
-    "scripts": {
-        "start": "cds watch"
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana"
+             },
+          "auth": {
+            "kind": "dummy"
+          }
+        }
     }
+  },
+  "scripts": {
+    "start": "cds watch"
+  }
 }
