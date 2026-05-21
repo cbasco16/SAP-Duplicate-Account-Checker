@@ -1,7 +1,6 @@
 namespace com.myorg.duplicatecheck;
-
 entity Persons {
-    key ID              : UUID;
+    key ID              : UUID @cds.on.insert: $uuid;
     firstName           : String(100);
     lastName            : String(100);
     companyName         : String(200);
@@ -16,5 +15,5 @@ entity Persons {
     bankHolderName      : String(200);
     bankAccountNumber   : String(100);
     bankName            : String(100);
-    createdAt           : Timestamp;
+    createdAt           : Timestamp @cds.on.insert: $now;
 }

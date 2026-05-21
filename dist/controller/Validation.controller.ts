@@ -1,5 +1,7 @@
+cat > /home/user/projects/SAP-Duplicate-Account-Checker/webapp/controller/Validation.controller.ts << 'EOF'
 import BaseController from "./BaseController";
 import MessageBox from "sap/m/MessageBox";
+import MessageToast from "sap/m/MessageToast";
 import JSONModel from "sap/ui/model/json/JSONModel";
 
 /**
@@ -27,12 +29,30 @@ export default class Validation extends BaseController {
             });
 
             if (response.ok) {
-                // Successfully saved
-                const saved = await response.json();
+                const text = await response.text();
+                const saved = text ? JSON.parse(text) : {};
                 const score = saved.aiScore || 100;
                 const warning = saved.aiWarning;
 
-                if (warning) {
+                if (warning && score >= 50 && score < 80) {
+                    // WARN — show Accept/Reject dialog
+                    MessageBox.warning(
+                        `AI detected a possible duplicate record.\n\nSimilarity Score: ${score}/100\n\nReason: ${warning}\n\nDo you want to accept and keep this record?`,
+                        {
+                            title: "Possible Duplicate — Review Required",
+                            actions: ["Accept", "Reject"],
+                            onClose: (action: string) => {
+                                if (action === "Accept") {
+                                    MessageToast.show("Record accepted and saved.");
+                                    this.getOwnerComponent().getRouter().navTo("RouteMain");
+                                } else {
+                                    MessageToast.show("Record rejected. Please review your entries.");
+                                    this.getOwnerComponent().getRouter().navTo("RouteMain");
+                                }
+                            }
+                        }
+                    );
+                } else if (warning) {
                     MessageBox.warning(
                         `Record saved, but AI detected a possible similarity:\n\n"${warning}"\n\nSimilarity Score: ${score}/100`,
                         {
@@ -55,17 +75,15 @@ export default class Validation extends BaseController {
                 }
 
             } else {
-                // Error response from CAP
                 const errorResponse = await response.json();
                 let errorData = {
                     type: "UNKNOWN",
-                    fields: [],
+                    fields: [] as string[],
                     score: 0,
                     reason: errorResponse.error?.message || "Unknown error",
                     recommendations: "Please review your entries."
                 };
 
-                // Try to parse the CAP error message as JSON
                 try {
                     const parsed = JSON.parse(errorResponse.error?.message);
                     errorData = { ...errorData, ...parsed };
@@ -95,6 +113,7 @@ export default class Validation extends BaseController {
             }
 
         } catch (error) {
+            console.error("Submit error:", error);
             MessageBox.error(
                 "Could not connect to the database.\nPlease ensure the CAP server is running on port 4004.",
                 { title: "Connection Error" }

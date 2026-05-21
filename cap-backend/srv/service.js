@@ -1,18 +1,18 @@
 const cds = require('@sap/cds');
 const { scoreRecord } = require('./ai-scoring');
-
 module.exports = cds.service.impl(async function () {
     const { Persons } = this.entities;
-
     this.before('CREATE', Persons, async (req) => {
         const { firstName, lastName, email, taxNumber, bankAccountNumber } = req.data;
-
         console.log('=================================');
-        console.log('[CAP] New record received:', { firstName, lastName, email });
+        console.log('[CAP] New record received:', { firstName, lastName, email, taxNumber, bankAccountNumber });
+
+        // Remove aiScore and aiWarning to prevent HANA insert failure
+        delete req.data.aiScore;
+        delete req.data.aiWarning;
 
         // Step 1 — Exact duplicate check
         const exactDuplicates = [];
-
         const emailMatch = email ? await SELECT.one.from(Persons).where({ email }) : null;
         const taxMatch = taxNumber ? await SELECT.one.from(Persons).where({ taxNumber }) : null;
         const bankMatch = bankAccountNumber ? await SELECT.one.from(Persons).where({ bankAccountNumber }) : null;
@@ -42,15 +42,10 @@ module.exports = cds.service.impl(async function () {
                 .columns('ID', 'firstName', 'lastName', 'email',
                          'phone', 'taxNumber', 'bankAccountNumber', 'bankName')
                 .limit(50);
-
             console.log(`[CAP] Sending ${existingRecords.length} existing records to n8n`);
-
             const aiResult = await scoreRecord(req.data, existingRecords);
-
             console.log('[CAP] n8n response received:', aiResult);
             console.log(`[CAP] Score: ${aiResult.score}/100 | Decision: ${aiResult.decision}`);
-
-            req.data.aiScore = aiResult.score;
 
             if (aiResult.score < 50) {
                 console.log('[CAP] BLOCKING record - score too low');
@@ -63,16 +58,12 @@ module.exports = cds.service.impl(async function () {
                 }));
             } else if (aiResult.score < 80) {
                 console.log('[CAP] WARNING - score in grey zone');
-                req.data.aiWarning = aiResult.reason;
             } else {
                 console.log('[CAP] PASS - record is unique');
             }
-
         } catch (err) {
             console.error('[CAP] n8n call failed:', err.message);
-            console.error('[CAP] Full error:', err);
         }
-
         console.log('=================================');
     });
 });
