@@ -66,8 +66,6 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast", "sa
         });
         return;
       }
-
-      // Collect all field values
       const formData = {
         firstName: view.byId("firstName").getValue(),
         lastName: view.byId("lastName").getValue(),
@@ -84,35 +82,106 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast", "sa
         bankAccountNumber: view.byId("bankAccountNumber").getValue(),
         bankName: view.byId("bankName").getValue()
       };
-
-      // Check for duplicates via CAP before navigating
       this._checkDuplicates(formData);
     },
     _checkDuplicates: async function _checkDuplicates(formData) {
+      await this._submitToCAP(formData, false);
+    },
+    _submitToCAP: async function _submitToCAP(formData, userConfirmed) {
       try {
-        const response = await fetch(`/odata/v4/duplicate-check/Persons?$filter=email eq '${formData.email}' or taxNumber eq '${formData.taxNumber}' or bankAccountNumber eq '${formData.bankAccountNumber}'`);
-        const result = await response.json();
-        if (result.value && result.value.length > 0) {
-          // Duplicates found
-          const duplicate = result.value[0];
-          const matches = [];
-          if (duplicate.email === formData.email) matches.push("Email Address");
-          if (duplicate.taxNumber === formData.taxNumber && formData.taxNumber) matches.push("Tax Number");
-          if (duplicate.bankAccountNumber === formData.bankAccountNumber && formData.bankAccountNumber) matches.push("Bank Account Number");
-          MessageBox.warning(`A duplicate record was found matching:\n\n• ${matches.join("\n• ")}\n\nPlease review your entries.`, {
-            title: "Duplicate Detected"
-          });
-        } else {
-          // No duplicates — pass data to Validation page
+        const payload = {
+          ...formData,
+          ...(userConfirmed && {
+            _userConfirmed: true
+          })
+        };
+        const response = await fetch("/odata/v4/duplicate-check/Persons", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+          MessageToast.show("Record saved successfully.");
           const formModel = new JSONModel(formData);
           this.getOwnerComponent().setModel(formModel, "formModel");
           this.getOwnerComponent().getRouter().navTo("RouteValidation");
+          return;
+        }
+        let errorBody = {};
+        try {
+          const raw = await response.json();
+          const message = raw?.error?.message || "";
+          errorBody = JSON.parse(message);
+        } catch {
+          MessageBox.error("An unexpected error occurred.", {
+            title: "Error"
+          });
+          return;
+        }
+        const {
+          type,
+          score,
+          reason,
+          matchedRecords,
+          recommendations
+        } = errorBody;
+        if (type === "EXACT_DUPLICATE") {
+          const fields = errorBody.fields;
+          MessageBox.error(`This record cannot be saved.\n\nExact duplicate found on:\n• ${fields.join("\n• ")}\n\nPlease review your entries.`, {
+            title: "Duplicate Record Blocked"
+          });
+        } else if (type === "AI_DUPLICATE") {
+          MessageBox.error(`This record has been blocked.\n\nRisk Score: ${score}/100\n\nReason: ${reason}\n\n${recommendations}`, {
+            title: "Duplicate Record Blocked"
+          });
+        } else if (type === "AI_WARN") {
+          this._showWarnDialog(formData, score, reason, matchedRecords, recommendations);
         }
       } catch (error) {
-        MessageBox.error("Could not connect to the database. Please ensure the CAP server is running on port 4004.", {
+        MessageBox.error("Could not connect to the server. Please ensure the CAP server is running.", {
           title: "Connection Error"
         });
       }
+    },
+    _showWarnDialog: function _showWarnDialog(formData, score, reason, matchedRecords, recommendations) {
+      const matchedText = matchedRecords?.map(r => `• Record ID: ${r.id}\n  Fields: ${r.matchedFields?.join(", ")}\n  ${r.details}`).join("\n\n") || "No specific records identified.";
+      MessageBox.warning(`A possible duplicate was detected.\n\n` + `Risk Score: ${score}/100\n\n` + `Reason: ${reason}\n\n` + `Matched Records:\n${matchedText}\n\n` + `Recommendation: ${recommendations}\n\n` + `Do you want to save this record anyway?`, {
+        title: "⚠️ Possible Duplicate Detected",
+        actions: ["Accept", "Reject"],
+        emphasizedAction: "Reject",
+        onClose: async action => {
+          // ✅ On Accept — call confirmSave action instead of POST
+          if (action === "Accept") {
+            try {
+              const response = await fetch("/odata/v4/duplicate-check/confirmSave", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+              });
+              if (response.ok) {
+                MessageToast.show("Record saved successfully.");
+                const formModel = new JSONModel(formData);
+                this.getOwnerComponent().setModel(formModel, "formModel");
+                this.getOwnerComponent().getRouter().navTo("RouteValidation");
+              } else {
+                MessageBox.error("Failed to save record.", {
+                  title: "Error"
+                });
+              }
+            } catch (error) {
+              MessageBox.error("Could not connect to the server.", {
+                title: "Connection Error"
+              });
+            }
+          } else {
+            MessageToast.show("Record was not saved. Please review your entries.");
+          }
+        }
+      });
     },
     _clearAllFields: function _clearAllFields() {
       const view = this.getView();

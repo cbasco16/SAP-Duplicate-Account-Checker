@@ -1,4 +1,3 @@
-cat > /home/user/projects/SAP-Duplicate-Account-Checker/webapp/controller/Validation.controller.ts << 'EOF'
 import BaseController from "./BaseController";
 import MessageBox from "sap/m/MessageBox";
 import MessageToast from "sap/m/MessageToast";

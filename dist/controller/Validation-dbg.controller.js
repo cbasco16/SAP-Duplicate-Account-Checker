@@ -1,4 +1,4 @@
-sap.ui.define(["./BaseController", "sap/m/MessageBox"], function (__BaseController, MessageBox) {
+sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast"], function (__BaseController, MessageBox, MessageToast) {
   "use strict";
 
   function _interopRequireDefault(obj) {
@@ -27,11 +27,26 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox"], function (__BaseControll
           body: JSON.stringify(formData)
         });
         if (response.ok) {
-          // Successfully saved
-          const saved = await response.json();
+          const text = await response.text();
+          const saved = text ? JSON.parse(text) : {};
           const score = saved.aiScore || 100;
           const warning = saved.aiWarning;
-          if (warning) {
+          if (warning && score >= 50 && score < 80) {
+            // WARN — show Accept/Reject dialog
+            MessageBox.warning(`AI detected a possible duplicate record.\n\nSimilarity Score: ${score}/100\n\nReason: ${warning}\n\nDo you want to accept and keep this record?`, {
+              title: "Possible Duplicate — Review Required",
+              actions: ["Accept", "Reject"],
+              onClose: action => {
+                if (action === "Accept") {
+                  MessageToast.show("Record accepted and saved.");
+                  this.getOwnerComponent().getRouter().navTo("RouteMain");
+                } else {
+                  MessageToast.show("Record rejected. Please review your entries.");
+                  this.getOwnerComponent().getRouter().navTo("RouteMain");
+                }
+              }
+            });
+          } else if (warning) {
             MessageBox.warning(`Record saved, but AI detected a possible similarity:\n\n"${warning}"\n\nSimilarity Score: ${score}/100`, {
               title: "Saved with Warning",
               onClose: () => {
@@ -47,7 +62,6 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox"], function (__BaseControll
             });
           }
         } else {
-          // Error response from CAP
           const errorResponse = await response.json();
           let errorData = {
             type: "UNKNOWN",
@@ -56,8 +70,6 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox"], function (__BaseControll
             reason: errorResponse.error?.message || "Unknown error",
             recommendations: "Please review your entries."
           };
-
-          // Try to parse the CAP error message as JSON
           try {
             const parsed = JSON.parse(errorResponse.error?.message);
             errorData = {
@@ -82,6 +94,7 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox"], function (__BaseControll
           }
         }
       } catch (error) {
+        console.error("Submit error:", error);
         MessageBox.error("Could not connect to the database.\nPlease ensure the CAP server is running on port 4004.", {
           title: "Connection Error"
         });
