@@ -1,4 +1,4 @@
-{
+xx6nano ~/projects/SAPDuplicateAccountChecker/cap-backend/pa{
   "name": "cap-backend",
   "version": "1.0.0",
   "description": "CAP backend for duplicate check",
@@ -18,14 +18,14 @@
       "kind": "hana"
     },
     "[production]": {
-      "auth": "dummy"
+      "auth": "xsuaa"
     },
     "auth": {
       "[development]": {
         "kind": "dummy"
       },
       "[production]": {
-        "kind": "dummy"
+        "kind": "xsuaa"
       }
     }
   }
