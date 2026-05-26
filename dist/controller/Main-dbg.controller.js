@@ -1,4 +1,4 @@
-sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast", "sap/ui/model/json/JSONModel"], function (__BaseController, MessageBox, MessageToast, JSONModel) {
+sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast", "sap/ui/model/json/JSONModel", "sap/ui/core/UIComponent", "sap/ui/core/routing/History"], function (__BaseController, MessageBox, MessageToast, JSONModel, UIComponent, History) {
   "use strict";
 
   function _interopRequireDefault(obj) {
@@ -195,6 +195,19 @@ sap.ui.define(["./BaseController", "sap/m/MessageBox", "sap/m/MessageToast", "sa
         }
       });
       MessageToast.show("All fields have been reset.");
+    },
+    /**
+     * Handle back navigation
+     * @public
+     */
+    onNavBack: function _onNavBack() {
+      const oPreviousHash = History.getInstance().getPreviousHash();
+      const oRouter = UIComponent.getRouterFor(this);
+      if (oPreviousHash !== undefined) {
+        window.history.back();
+      } else {
+        oRouter.navTo("Dashboard", {}, true);
+      }
     }
   });
   return Main;

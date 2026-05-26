@@ -1,0 +1,112 @@
+<mvc:View
+	controllerName="com.myorg.duplicatecheck.controller.Dashboard"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout"
+	xmlns:f="sap.f"
+	xmlns:card="sap.f.cards">
+
+	<f:DynamicPage
+		id="dashboardPage"
+		headerExpanded="true"
+		toggleHeaderOnTitleClick="true"
+		fitContent="false">
+
+		<!-- ═══ DYNAMIC PAGE TITLE ═══ -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title
+						text="Duplicate Account Checker"
+						level="H2" />
+				</f:heading>
+				<f:snappedHeading>
+					<Title
+						text="Duplicate Account Checker"
+						level="H2" />
+				</f:snappedHeading>
+				<f:breadcrumbs>
+					<m:Breadcrumbs
+						xmlns:m="sap.m"
+						links="Home"
+						currentLocationText="Dashboard" />
+				</f:breadcrumbs>
+				<f:actions>
+					<Button
+						text="Help"
+						type="Ghost"
+						icon="sap-icon://sys-help" />
+				</f:actions>
+			</f:DynamicPageTitle>
+		</f:title>
+
+		<!-- ═══ DYNAMIC PAGE HEADER ═══ -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<MessageStrip
+					text="Welcome to the Duplicate Account Checker. Select a function below to get started."
+					type="Information"
+					showIcon="true"
+					showCloseButton="true"
+					class="sapUiSmallMarginBottom" />
+			</f:DynamicPageHeader>
+		</f:header>
+
+		<!-- ═══ DYNAMIC PAGE CONTENT ═══ -->
+		<f:content>
+			<VBox class="sapUiResponsiveMargin">
+
+				<!-- Section Label -->
+				<Title
+					text="Overview"
+					level="H3"
+					class="sapUiSmallMarginBottom" />
+
+				<!-- Tile Container (Fiori Launchpad–style) -->
+				<layout:Grid
+					defaultSpan="XL3 L4 M6 S12"
+					hSpacing="1"
+					vSpacing="1">
+
+					<!-- Tile 1: Duplicate Check -->
+					<GenericTile
+						id="duplicateCheckTile"
+						header="Duplicate Check"
+						subheader="Validate accounts for duplicates"
+						press="onNavigateToDuplicateCheck"
+						frameType="OneByOne"
+						state="Loaded"
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop">
+						<TileContent
+							footer="Last run: Today">
+							<ImageContent
+								src="sap-icon://duplicate" />
+						</TileContent>
+					</GenericTile>
+
+					<!-- Tile 2: Reports -->
+					<GenericTile
+						id="reportTile"
+						header="Reports"
+						subheader="View analytics and match results"
+						press="onNavigateToReport"
+						frameType="OneByOne"
+						state="Loaded"
+						class="sapUiTinyMarginBegin sapUiTinyMarginTop">
+						<TileContent
+							footer="Last updated: Today">
+							<ImageContent
+								src="sap-icon://bar-chart" />
+						</TileContent>
+					</GenericTile>
+
+				</layout:Grid>
+
+			</VBox>
+		</f:content>
+
+	</f:DynamicPage>
+
+</mvc:View>

@@ -1,4 +1,4 @@
-sap.ui.define(["sap/ui/core/UIComponent", "./model/models", "sap/ui/Device"], function (UIComponent, __models, Device) {
+sap.ui.define(["sap/ui/core/UIComponent", "./model/models", "sap/ui/Device", "sap/ui/model/odata/v4/ODataModel"], function (UIComponent, __models, Device, ODataModel) {
   "use strict";
 
   function _interopRequireDefault(obj) {
@@ -20,29 +20,33 @@ sap.ui.define(["sap/ui/core/UIComponent", "./model/models", "sap/ui/Device"], fu
       // create the device model
       this.setModel(models.createDeviceModel(), "device");
 
+      // register persons OData V4 model if manifest didn't pick it up
+      if (!this.getModel("persons")) {
+        this.setModel(new ODataModel({
+          serviceUrl: "/odata/v4/duplicate-check/",
+          synchronizationMode: "None",
+          operationMode: "Server",
+          autoExpandSelect: true
+        }), "persons");
+      }
+
       // create the views based on the url/hash
       this.getRouter().initialize();
     },
-    /**
-     * This method can be called to determine whether the sapUiSizeCompact or sapUiSizeCozy
-     * design mode class should be set, which influences the size appearance of some controls.
-     * @public
-     * @returns css class, either 'sapUiSizeCompact' or 'sapUiSizeCozy' - or an empty string if no css class should be set
-     */
     getContentDensityClass: function _getContentDensityClass() {
       if (this.contentDensityClass === undefined) {
-        // check whether FLP has already set the content density class; do nothing in this case
         if (document.body.classList.contains("sapUiSizeCozy") || document.body.classList.contains("sapUiSizeCompact")) {
           this.contentDensityClass = "";
         } else if (!Device.support.touch) {
-          // apply "compact" mode if touch is not supported
           this.contentDensityClass = "sapUiSizeCompact";
         } else {
-          // "cozy" in case of touch support; default for most sap.m controls, but needed for desktop-first controls like sap.ui.table.Table
           this.contentDensityClass = "sapUiSizeCozy";
         }
       }
       return this.contentDensityClass;
+    },
+    navigateToReport: function _navigateToReport() {
+      this.getRouter().navTo("report");
     }
   });
   return Component;

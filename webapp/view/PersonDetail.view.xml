@@ -1,0 +1,196 @@
+<mvc:View
+    controllerName="com.myorg.duplicatecheck.controller.PersonDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    xmlns="sap.m">
+
+    <Page
+        id="personDetailPage"
+        title="Person Details"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        class="sapUiResponsiveContentPadding">
+
+        <headerContent>
+            <Button
+                icon="sap-icon://edit"
+                press=".onEdit"
+                tooltip="Edit"
+                enabled="false" />
+        </headerContent>
+
+        <content>
+            <VBox class="sapUiResponsiveMargin">
+
+                <!-- Personal Information -->
+                <f:SimpleForm
+                    id="personalForm"
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    title="Personal Information"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="1"
+                    class="sapUiSmallMarginBottom">
+                    <f:content>
+                        <Label text="First Name" />
+                        <Text text="{persons>firstName}" />
+
+                        <Label text="Last Name" />
+                        <Text text="{persons>lastName}" />
+
+                        <Label text="Company" />
+                        <Text text="{persons>companyName}" />
+
+                        <Label text="Email" />
+                        <Text text="{persons>email}" />
+
+                        <Label text="Phone" />
+                        <Text text="{persons>phone}" />
+                    </f:content>
+                </f:SimpleForm>
+
+                <!-- Address -->
+                <f:SimpleForm
+                    id="addressForm"
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    title="Address"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="1"
+                    class="sapUiSmallMarginBottom">
+                    <f:content>
+                        <Label text="Street" />
+                        <Text text="{persons>street}" />
+
+                        <Label text="City" />
+                        <Text text="{persons>city}" />
+
+                        <Label text="Postal Code" />
+                        <Text text="{persons>postalCode}" />
+
+                        <Label text="Region" />
+                        <Text text="{persons>region}" />
+
+                        <Label text="Country" />
+                        <Text text="{persons>country}" />
+                    </f:content>
+                </f:SimpleForm>
+
+              <f:SimpleForm
+                    id="financialForm"
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    title="Financial Information"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="1"
+                    class="sapUiSmallMarginBottom">
+                    <f:content>
+
+                        <Label text="Tax Number" />
+                        <HBox alignItems="Center">
+                            <Text
+                                id="taxNumberText"
+                                text="{
+                                    path: 'persons>taxNumber',
+                                    targetType: 'any',
+                                    formatter: '.formatMasked'
+                                }" />
+                            <Button
+                                id="taxNumberToggle"
+                                icon="sap-icon://show"
+                                type="Transparent"
+                                press=".onToggleTaxNumber"
+                                tooltip="Show / Hide"
+                                class="sapUiTinyMarginBegin" />
+                        </HBox>
+
+                        <Label text="Bank Holder Name" />
+                        <HBox alignItems="Center">
+                            <Text
+                                id="bankHolderText"
+                                text="{
+                                    path: 'persons>bankHolderName',
+                                    targetType: 'any',
+                                    formatter: '.formatMasked'
+                                }" />
+                            <Button
+                                id="bankHolderToggle"
+                                icon="sap-icon://show"
+                                type="Transparent"
+                                press=".onToggleBankHolder"
+                                tooltip="Show / Hide"
+                                class="sapUiTinyMarginBegin" />
+                        </HBox>
+
+                        <Label text="Bank Account Number" />
+                        <HBox alignItems="Center">
+                            <Text
+                                id="bankAccountText"
+                                text="{
+                                    path: 'persons>bankAccountNumber',
+                                    targetType: 'any',
+                                    formatter: '.formatMasked'
+                                }" />
+                            <Button
+                                id="bankAccountToggle"
+                                icon="sap-icon://show"
+                                type="Transparent"
+                                press=".onToggleBankAccount"
+                                tooltip="Show / Hide"
+                                class="sapUiTinyMarginBegin" />
+                        </HBox>
+
+                        <Label text="Bank Name" />
+                        <Text text="{persons>bankName}" />
+
+                    </f:content>
+</f:SimpleForm>
+
+                <!-- Metadata -->
+                <f:SimpleForm
+                    id="metaForm"
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    title="Record Information"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="1">
+                    <f:content>
+                        <Label text="ID" />
+                        <Text text="{persons>ID}" />
+
+                        <Label text="Created At" />
+                        <Text text="{
+                            path: 'persons>createdAt',
+                            targetType: 'any',
+                            formatter: '.formatDate'
+                        }" />
+                    </f:content>
+                </f:SimpleForm>
+
+            </VBox>
+        </content>
+
+    </Page>
+</mvc:View>

@@ -3,6 +3,8 @@ import MessageBox from "sap/m/MessageBox";
 import MessageToast from "sap/m/MessageToast";
 import Input from "sap/m/Input";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import UIComponent from "sap/ui/core/UIComponent";
+import History from "sap/ui/core/routing/History";
 
 /**
  * @namespace com.myorg.duplicatecheck.controller
@@ -221,5 +223,20 @@ export default class Main extends BaseController {
         });
 
         MessageToast.show("All fields have been reset.");
+    }
+
+    /**
+     * Handle back navigation
+     * @public
+     */
+    public onNavBack(): void {
+        const oPreviousHash = History.getInstance().getPreviousHash();
+        const oRouter = UIComponent.getRouterFor(this);
+
+        if (oPreviousHash !== undefined) {
+            window.history.back();
+        } else {
+            oRouter.navTo("Dashboard", {}, true);
+        }
     }
 }

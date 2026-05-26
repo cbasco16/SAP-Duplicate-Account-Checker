@@ -34,7 +34,8 @@
             "minUI5Version": "1.148.0",
             "libs": {
                 "sap.ui.core": {},
-                "sap.m": {}
+                "sap.m": {},
+                "sap.ui.layout": {}
             }
         },
         "flexEnabled": false,
@@ -50,6 +51,15 @@
                     "bundleName": "com.myorg.duplicatecheck.i18n.i18n",
                     "async": true
                 }
+            },
+            "persons": {
+                "type": "sap.ui.model.odata.v4.ODataModel",
+                "settings": {
+                    "serviceUrl": "/odata/v4/duplicate-check/",
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true
+                }
             }
         },
         "routing": {
@@ -63,32 +73,61 @@
             },
             "routes": [
                 {
-                    "name": "RouteMain",
+                    "name": "Dashboard",
                     "pattern": "",
-                    "target": [
-                        "TargetMain"
-                    ]
+                    "target": ["TargetDashboard"]
+                },
+                {
+                    "name": "RouteMain",
+                    "pattern": "main",
+                    "target": ["TargetMain"]
+                },
+                {
+                    "name": "Report",
+                    "pattern": "report",
+                    "target": ["TargetReport"]
                 },
                 {
                     "name": "RouteValidation",
                     "pattern": "validation",
-                    "target": [
-                        "TargetValidation"
-                    ]
+                    "target": ["TargetValidation"]
+                },
+                {
+                    "name": "PersonDetail",
+                    "pattern": "report/{id}",
+                    "target": ["TargetPersonDetail"]
                 }
             ],
             "targets": {
-                "TargetMain": {
+                "TargetDashboard": {
                     "viewType": "XML",
                     "viewLevel": 1,
+                    "viewId": "Dashboard",
+                    "viewName": "Dashboard"
+                },
+                "TargetMain": {
+                    "viewType": "XML",
+                    "viewLevel": 2,
                     "viewId": "Main",
                     "viewName": "Main"
                 },
-                "TargetValidation": {
+                "TargetReport": {
                     "viewType": "XML",
                     "viewLevel": 2,
+                    "viewId": "Report",
+                    "viewName": "Report"
+                },
+                "TargetValidation": {
+                    "viewType": "XML",
+                    "viewLevel": 3,
                     "viewId": "Validation",
                     "viewName": "Validation"
+                },
+                "TargetPersonDetail": {
+                    "viewType": "XML",
+                    "viewLevel": 3,
+                    "viewId": "PersonDetail",
+                    "viewName": "PersonDetail"
                 }
             }
         }

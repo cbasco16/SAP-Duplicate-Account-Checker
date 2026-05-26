@@ -40,7 +40,8 @@
 			"minUI5Version": "1.148.0",
 			"libs": {
 				"sap.ui.core": {},
-				"sap.m": {}
+				"sap.m": {},
+				"sap.ui.layout": {}
 			}
 		},
 		"flexEnabled": false,
@@ -62,6 +63,15 @@
 				}
 			}
 		},
+		"persons": {
+			"type": "sap.ui.model.odata.v4.ODataModel",
+			"settings": {
+				"serviceUrl": "/odata/v4/duplicate-check/",
+				"synchronizationMode": "None",
+				"operationMode": "Server",
+				"autoExpandSelect": true
+			}
+		},
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
@@ -73,10 +83,24 @@
 			},
 			"routes": [
 				{
-					"name": "RouteMain",
+					"name": "Dashboard",
 					"pattern": "",
 					"target": [
+						"TargetDashboard"
+					]
+				},
+				{
+					"name": "RouteMain",
+					"pattern": "main",
+					"target": [
 						"TargetMain"
+					]
+				},
+				{
+					"pattern": "report",
+					"name": "Report",
+					"target": [
+						"TargetReport"
 					]
 				},
 				{
@@ -88,15 +112,27 @@
 				}
 			],
 			"targets": {
-				"TargetMain": {
+				"TargetDashboard": {
 					"viewType": "XML",
 					"viewLevel": 1,
+					"viewId": "Dashboard",
+					"viewName": "Dashboard"
+				},
+				"TargetMain": {
+					"viewType": "XML",
+					"viewLevel": 2,
 					"viewId": "Main",
 					"viewName": "Main"
 				},
-				"TargetValidation": {
+				"TargetReport": {
 					"viewType": "XML",
 					"viewLevel": 2,
+					"viewId": "Report",
+					"viewName": "Report"
+				},
+				"TargetValidation": {
+					"viewType": "XML",
+					"viewLevel": 3,
 					"viewId": "Validation",
 					"viewName": "Validation"
 				}

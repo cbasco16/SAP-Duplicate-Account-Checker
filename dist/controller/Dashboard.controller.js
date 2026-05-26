@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/ui/core/UIComponent"],function(o,t){"use strict";const n=o.extend("com.myorg.duplicatecheck.controller.Dashboard",{onInit:function o(){},onNavigateToDuplicateCheck:function o(){const n=t.getRouterFor(this);n.navTo("RouteMain")},onNavigateToReport:function o(){const n=t.getRouterFor(this);n.navTo("Report")}});return n});
+//# sourceMappingURL=Dashboard.controller.js.map

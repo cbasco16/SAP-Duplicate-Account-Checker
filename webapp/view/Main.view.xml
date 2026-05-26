@@ -14,7 +14,8 @@
 		title="{i18n>appTitle}"
 		id="page"
 		showFooter="true"
-		showNavButton="false"
+		showNavButton="true"
+		navButtonPress=".onNavBack"
 		backgroundDesign="List">
 
 		<footer>

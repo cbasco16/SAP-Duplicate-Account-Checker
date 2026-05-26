@@ -1,0 +1,136 @@
+<mvc:View
+	controllerName="com.myorg.duplicatecheck.controller.Report"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	displayBlock="true"
+	xmlns="sap.m">
+
+	<Page
+		id="reportPage"
+		title="Report"
+		showNavButton="true"
+		navButtonPress=".onNavBack"
+		class="sapUiResponsiveContentPadding">
+
+		<headerContent>
+			<Button
+				icon="sap-icon://refresh"
+				press=".onRefresh"
+				tooltip="Refresh Report" />
+			<Button
+				icon="sap-icon://download"
+				press=".onDownload"
+				tooltip="Download as Excel" />
+		</headerContent>
+
+		<content>
+			<VBox class="sapUiResponsivePadding">
+
+				<!-- Filters -->
+				<f:SimpleForm
+					editable="true"
+					layout="ResponsiveGridLayout"
+					class="sapUiSmallMarginBottom">
+					<f:content>
+						<Label text="Start Date" />
+						<DatePicker
+							id="startDate" />
+
+						<Label text="End Date" />
+						<DatePicker
+							id="endDate" />
+
+						<Button
+							text="Apply Filters"
+							type="Emphasized"
+							press=".onApplyFilters" />
+					</f:content>
+				</f:SimpleForm>
+
+				<!-- Data Table bound to OData V4 Persons entity -->
+				<Table
+					id="reportTable"
+					items="{
+						path: 'persons>/Persons',
+						parameters: {
+							$count: true
+						}
+					}"
+					growing="true"
+					growingThreshold="20"
+					growingScrollToLoad="true"
+					class="sapUiSmallMarginBottom">
+
+					<headerToolbar>
+						<Toolbar>
+							<Title text="Persons" level="H3" />
+							<ToolbarSpacer />
+							<SearchField
+								id="searchField"
+								search=".onSearch"
+								width="200px"
+								placeholder="Search by name, email, company..." />
+						</Toolbar>
+					</headerToolbar>
+
+					<columns>
+						<Column width="15%">
+							<Text text="First Name" />
+						</Column>
+						<Column width="15%">
+							<Text text="Last Name" />
+						</Column>
+						<Column width="20%">
+							<Text text="Company" />
+						</Column>
+						<Column width="20%">
+							<Text text="Email" />
+						</Column>
+						<Column width="15%">
+							<Text text="Phone" />
+						</Column>
+						<Column width="15%">
+							<Text text="Created At" />
+						</Column>
+					</columns>
+
+					<items>
+						<ColumnListItem
+							type="Navigation"
+							press=".onItemPress">
+							<cells>
+								<Text text="{persons>firstName}" />
+								<Text text="{persons>lastName}" />
+								<Text text="{persons>companyName}" />
+								<Text text="{persons>email}" />
+								<Text text="{persons>phone}" />
+								<Text text="{
+									path: 'persons>createdAt',
+									targetType: 'any',
+									formatter: '.formatDate'
+								}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+
+					<noData>
+						<IllustratedMessage
+							illustrationType="sapIllus-NoData"
+							title="No Records Found"
+							description="Try adjusting your filters or search term." />
+					</noData>
+				</Table>
+
+			</VBox>
+		</content>
+
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer />
+				<Text id="recordCountText" text="Loading..." />
+			</OverflowToolbar>
+		</footer>
+
+	</Page>
+</mvc:View>
